@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 
 const ContentHistory = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -81,10 +82,10 @@ const ContentHistory = () => {
                     <div className="p-6">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                             <div className="flex items-center mb-4 md:mb-0">
-                                <a href="#" data-readdy="true" className="text-gray-500 hover:text-indigo-600 mr-3 cursor-pointer">
+                                <Link to='/' data-readdy="true" className="text-gray-500 hover:text-indigo-600 mr-3 cursor-pointer">
                                     <i className="fas fa-arrow-left mr-2"></i>
                                     Back to Generator
-                                </a>
+                                </Link>
                                 <h2 className="text-2xl font-bold text-gray-900">Content History</h2>
                             </div>
                             <div className="flex space-x-3">
