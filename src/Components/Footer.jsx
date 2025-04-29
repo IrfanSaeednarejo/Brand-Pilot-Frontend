@@ -21,7 +21,7 @@ const Footer = () => {
               <ul className='text-gray-600 dark:text-gray-400'>
                 <li className='mb-4'>
                   <Link to='/' className='hover:underline'>
-                    NoteSwap
+                  BranPilot
                   </Link>
                 </li>
               </ul>
@@ -43,7 +43,6 @@ const Footer = () => {
                 <li className='mb-4'>
                   <Link
                     to='generate'
-                    target='_blank'
                     className='hover:underline '
                   >
                     Generate Content
@@ -52,7 +51,6 @@ const Footer = () => {
                 <li className='mb-4'>
                   <Link
                     to={'/history'}
-                    target='_blank'
                     className='hover:underline '
                   >
                     Content History
@@ -61,7 +59,6 @@ const Footer = () => {
                 <li className='mb-4'>
                   <Link
                     to='output'
-                    target='_blank'
                     className='hover:underline '
                   >
                     Output Preview
@@ -75,9 +72,9 @@ const Footer = () => {
         <div className='sm:flex sm:items-center sm:justify-center w-full'>
           <span className='text-sm text-gray-500 sm:text-center dark:text-gray-400'>
             © {new Date().getFullYear()}{" "}
-            <a href='#' className='hover:undderline'>
-              NoteSwap
-            </a>
+            <Link href='/' className='hover:undderline'>
+              BranPilot
+            </Link>
             . All Rights Reserved.
           </span>
           <div className='flex mt-4 space-x-6 sm:justify-center sm:mt-0'></div>

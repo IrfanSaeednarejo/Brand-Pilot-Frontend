@@ -1,128 +1,253 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-
-import { useEffect } from "react";
 
 const Header = () => {
   const [loggedInUser, setLoggedInUser] = useState(false);
   const [user, setUser] = useState({});
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  useEffect(() => {
-    // const user = localStorage.getItem("user");
-    // setUser(JSON.parse(user));
 
-    if (user) {
+  useEffect(() => {
+    // Check for user in localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
       setLoggedInUser(true);
-    } else {
-      setLoggedInUser(false);
     }
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setLoggedInUser(false);
+    setUser({});
+    navigate("/");
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   return (
-    <header>
-      <nav className='bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800'>
-        <div className='flex flex-wrap items-center justify-between max-w-screen-xl mx-auto'>
-          <Link to='/' className='flex items-center'>
-            <span className='self-center text-xl font-semibold whitespace-nowrap dark:text-white'>
-              NoteSwap
+    <header className="bg-gray-900 border-b border-gray-800 shadow-lg">
+      <nav className="px-4 lg:px-6 py-3">
+        <div className="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto">
+          <Link to="/" className="flex items-center">
+            <span className="self-center text-2xl font-bold whitespace-nowrap text-white">
+              <span className="text-blue-400">Brand</span>Pilot
             </span>
           </Link>
-          <div className='flex items-center lg:order-2'>
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-8">
+            <div className="hidden lg:flex items-center space-x-6">
+              <Link
+                to="/"
+                className="text-gray-300 hover:text-blue-400 transition-colors duration-300 font-medium"
+              >
+                Home
+              </Link>
+              <Link
+                to="/about"
+                className="text-gray-300 hover:text-blue-400 transition-colors duration-300 font-medium"
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
+                className="text-gray-300 hover:text-blue-400 transition-colors duration-300 font-medium"
+              >
+                Contact
+              </Link>
+            </div>
+
             {loggedInUser ? (
-              <div className='w-12 cursor-pointer h-12 rounded-full bg-transparent border-amber-50'>
-                <img
-                  src={`https://api.dicebear.com/9.x/initials/svg?seed=${user.username}`}
-                  alt={`${user.username}'s avatar`}
-                  onClick={() => navigate("/profile")}
-                  className='rounded-full cursor-pointer border-amber-50'
-                />
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => navigate("/generate")}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20"
+                >
+                  Generate Content
+                </button>
+                <div className="relative group">
+                  <div className="w-10 h-10 rounded-full overflow-hidden cursor-pointer">
+                    <img
+                      src={`https://api.dicebear.com/9.x/initials/svg?seed=${user.username || 'User'}`}
+                      alt={`${user.username || 'User'}'s avatar`}
+                      className="w-full h-full object-cover"
+                      onClick={() => navigate("/profile")}
+                    />
+                  </div>
+                  <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-50 hidden group-hover:block border border-gray-700">
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
+                    >
+                      Your Profile
+                    </Link>
+                    <Link
+                      to="/settings"
+                      className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
+                    >
+                      Settings
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                </div>
               </div>
             ) : (
-              <>
+              <div className="flex items-center space-x-4">
                 <Link
-                  to='generate'
-                  className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'
+                  to="/login"
+                  className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium"
                 >
-                  Login
+                  Log in
                 </Link>
-                <button
-                  data-collapse-toggle='mobile-menu-2'
-                  type='button'
-                  className='inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
-                  aria-controls='mobile-menu-2'
-                  aria-expanded='false'
+                <Link
+                  to="/signup"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20"
                 >
-                  <span className='sr-only'>Open main menu</span>
-                  <svg
-                    className='w-6 h-6'
-                    fillRule='currentColor'
-                    viewBox='0 0 20 20'
-                    xmlns='http://www.w3.org/2000/svg'
-                  >
-                    <path
-                      fillRule='evenodd'
-                      d='M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
-                      clipRule='evenodd'
-                    ></path>
-                  </svg>
-                  <svg
-                    className='hidden w-6 h-6'
-                    fillRule='currentColor'
-                    viewBox='0 0 20 20'
-                    xmlns='http://www.w3.org/2000/svg'
-                  >
-                    <path
-                      fillRule='evenodd'
-                      d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z'
-                      clipRule='evenodd'
-                    ></path>
-                  </svg>
-                </button>
-              </>
+                  Sign up
+                </Link>
+              </div>
             )}
           </div>
-          <div
-            className='items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1'
-            id='mobile-menu-2'
-          >
-            <ul className='flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0'>
-              <li>
-                <Link
-                  to='/'
-                  className='block py-2 pl-3 pr-4 text-white bg-blue-700 rounded-sm lg:bg-transparent lg:text-blue-700 lg:p-0 dark:text-white'
-                  aria-current='page'
+
+          {/* Mobile menu button */}
+          <div className="flex lg:hidden items-center">
+            {loggedInUser && (
+              <button
+                onClick={() => navigate("/generate")}
+                className="mr-3 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-all duration-300"
+              >
+                Generate
+              </button>
+            )}
+            <button
+              onClick={toggleMobileMenu}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"
+              aria-expanded="false"
+            >
+              <span className="sr-only">Open main menu</span>
+              {mobileMenuOpen ? (
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/about'
-                  className='block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700'
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="h-6 w-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/profile'
-                  className='block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700'
-                >
-                  User Profile{" "}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/contact'
-                  className='block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700'
-                >
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden mt-3 pb-3 border-t border-gray-800">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              <Link
+                to="/"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                to="/features"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Features
+              </Link>
+              <Link
+                to="/pricing"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Pricing
+              </Link>
+              <Link
+                to="/dashboard"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
+
+              {loggedInUser ? (
+                <>
+                  <Link
+                    to="/profile"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Your Profile
+                  </Link>
+                  <Link
+                    to="/settings"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Settings
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <div className="pt-4 border-t border-gray-800">
+                  <Link
+                    to="/login"
+                    className="block w-full px-4 py-2 mb-2 text-center rounded-md text-white bg-gray-800 hover:bg-gray-700"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="block w-full px-4 py-2 text-center rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Start Free Trial
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </nav>
     </header>
   );

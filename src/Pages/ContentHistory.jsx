@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ContentHistory = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -7,7 +7,6 @@ const ContentHistory = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [viewMode, setViewMode] = useState('grid');
 
-    // Mock data for content history
     const contentHistory = [
         {
             id: 1,
@@ -47,10 +46,7 @@ const ContentHistory = () => {
         },
     ];
 
-    
-
     const handleDelete = (id) => {
-        // Delete functionality would go here
         console.log(`Delete item with id: ${id}`);
     };
 
@@ -63,106 +59,87 @@ const ContentHistory = () => {
         );
     });
 
-    // Sort content by newest first
     const sortedContent = [...filteredContent].sort((a, b) => {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
 
-    // Paginate content
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = sortedContent.slice(indexOfFirstItem, indexOfLastItem);
 
-
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Main Content */}
+        <div className="min-h-screen bg-gray-900 text-white">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="bg-white shadow rounded-lg overflow-hidden">
+                <div className="bg-gray-800 shadow-lg rounded-lg overflow-hidden">
                     <div className="p-6">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                             <div className="flex items-center mb-4 md:mb-0">
-                                <Link to='/' data-readdy="true" className="text-gray-500 hover:text-indigo-600 mr-3 cursor-pointer">
+                                <Link to='/' className="text-gray-400 hover:text-blue-400 mr-3">
                                     <i className="fas fa-arrow-left mr-2"></i>
-                                    Back to Generator
+                                    Back
                                 </Link>
-                                <h2 className="text-2xl font-bold text-gray-900">Content History</h2>
+                                <h2 className="text-3xl font-bold text-white">Content History</h2>
                             </div>
                             <div className="flex space-x-3">
                                 <button
                                     onClick={() => setViewMode('grid')}
-                                    className={`inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md ${viewMode === 'grid' ? 'bg-indigo-50 text-indigo-700 border-indigo-300' : 'text-gray-700 bg-white hover:bg-gray-50'} !rounded-button whitespace-nowrap cursor-pointer`}
+                                    className={`inline-flex items-center px-3 py-1.5 border ${viewMode === 'grid' ? 'border-blue-400 bg-blue-500/20 text-blue-300' : 'border-gray-600 text-gray-300'} rounded-md hover:bg-blue-500/10`}
                                 >
                                     <i className="fas fa-th-large mr-1.5"></i>
                                     Grid
                                 </button>
                                 <button
                                     onClick={() => setViewMode('list')}
-                                    className={`inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-sm font-medium rounded-md ${viewMode === 'list' ? 'bg-indigo-50 text-indigo-700 border-indigo-300' : 'text-gray-700 bg-white hover:bg-gray-50'} !rounded-button whitespace-nowrap cursor-pointer`}
+                                    className={`inline-flex items-center px-3 py-1.5 border ${viewMode === 'list' ? 'border-blue-400 bg-blue-500/20 text-blue-300' : 'border-gray-600 text-gray-300'} rounded-md hover:bg-blue-500/10`}
                                 >
                                     <i className="fas fa-list mr-1.5"></i>
                                     List
                                 </button>
                             </div>
                         </div>
-                        {/* Filters */}
-                        <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                            <div className="max-w-3xl mx-auto">
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        id="search"
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm pl-10"
-                                        placeholder="Search by title, content or tags..."
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                    />
-                                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
-                                        <i className="fas fa-search"></i>
-                                    </div>
+
+                        {/* Search */}
+                        <div className="bg-gray-700 p-4 rounded-lg mb-6">
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    id="search"
+                                    className="w-full px-4 py-3 bg-gray-800 text-white placeholder-gray-400 border border-gray-600 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Search by title, content or tags..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                                    <i className="fas fa-search"></i>
                                 </div>
                             </div>
                         </div>
-                        {/* Content Grid */}
+
+                        {/* Content Display */}
                         {viewMode === 'grid' ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {currentItems.map((item) => (
-                                    <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200">
-                                        <div className="relative h-48 overflow-hidden">
-                                            <img
-                                                src={item.thumbnail}
-                                                alt={item.title}
-                                                className="w-full h-full object-cover object-top"
-                                            />
-                                        
-                                        </div>
+                                    <div key={item.id} className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden hover:shadow-blue-500/50 transition">
+                                        <img
+                                            src={item.thumbnail}
+                                            alt={item.title}
+                                            className="w-full h-48 object-cover"
+                                        />
                                         <div className="p-4">
-                                            <div className="flex justify-between items-start mb-2">
-                                                <h3 className="text-lg font-medium text-gray-900 line-clamp-1">{item.title}</h3>
-                                            </div>
-                                            <p className="text-sm text-gray-500 mb-2">{item.date}</p>
-                                            <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.preview}</p>
-                                            <div className="flex flex-wrap gap-1.5 mb-4">
+                                            <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+                                            <p className="text-sm text-gray-400">{item.date}</p>
+                                            <p className="mt-2 text-gray-300 text-sm line-clamp-2">{item.preview}</p>
+                                            <div className="flex flex-wrap mt-3 gap-2">
                                                 {item.tags.map((tag, index) => (
-                                                    <span key={index} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
-                                                        {tag}
-                                                    </span>
+                                                    <span key={index} className="bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded text-xs">{tag}</span>
                                                 ))}
                                             </div>
-                                            <div className="flex justify-between items-center">
-                                                <button className="text-indigo-600 hover:text-indigo-800 text-sm font-medium cursor-pointer">
-                                                    View Details
-                                                </button>
-                                                <div className="flex space-x-2">
-                                                    <button className="text-gray-400 hover:text-indigo-600 cursor-pointer" title="Download">
-                                                        <i className="fas fa-download"></i>
-                                                    </button>
-                                                    <button className="text-gray-400 hover:text-indigo-600 cursor-pointer" title="Share">
-                                                        <i className="fas fa-share-alt"></i>
-                                                    </button>
-                                                    <button className="text-gray-400 hover:text-red-600 cursor-pointer" title="Delete" onClick={() => handleDelete(item.id)}>
-                                                        <i className="fas fa-trash-alt"></i>
-                                                    </button>
+                                            <div className="flex justify-between items-center mt-4">
+                                                <button className="text-blue-400 hover:underline text-sm">View Details</button>
+                                                <div className="flex space-x-2 text-gray-400">
+                                                    <i className="fas fa-download hover:text-blue-400 cursor-pointer"></i>
+                                                    <i className="fas fa-share-alt hover:text-blue-400 cursor-pointer"></i>
+                                                    <i className="fas fa-trash-alt hover:text-red-400 cursor-pointer" onClick={() => handleDelete(item.id)}></i>
                                                 </div>
                                             </div>
                                         </div>
@@ -170,68 +147,46 @@ const ContentHistory = () => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="overflow-hidden rounded-lg border border-gray-200">
-                                <table className="min-w-full divide-y divide-gray-200">
-                                    <thead className="bg-gray-50">
+                            <div className="overflow-hidden rounded-lg border border-gray-700">
+                                <table className="min-w-full divide-y divide-gray-700">
+                                    <thead className="bg-gray-800">
                                         <tr>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Content</th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tags</th>
-                                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Content</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Type</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Date</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Tags</th>
+                                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
+                                    <tbody className="bg-gray-900 divide-y divide-gray-800">
                                         {currentItems.map((item) => (
-                                            <tr key={item.id} className="hover:bg-gray-50">
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="flex items-center">
-                                                        <div className="flex-shrink-0 h-10 w-10 rounded overflow-hidden">
-                                                            <img src={item.thumbnail} alt={item.title} className="h-10 w-10 object-cover" />
-                                                        </div>
-                                                        <div className="ml-4">
-                                                            <div className="text-sm font-medium text-gray-900">{item.title}</div>
-                                                            <div className="text-sm text-gray-500 line-clamp-1">{item.preview}</div>
-                                                        </div>
+                                            <tr key={item.id} className="hover:bg-gray-800">
+                                                <td className="px-6 py-4 flex items-center space-x-3">
+                                                    <img src={item.thumbnail} className="h-10 w-10 rounded object-cover" alt="" />
+                                                    <div>
+                                                        <div className="text-white">{item.title}</div>
+                                                        <div className="text-gray-400 text-sm">{item.preview}</div>
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="flex items-center">
-                                                        <span className="text-sm text-gray-900 capitalize">{item.type}</span>
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {item.date}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="flex flex-wrap gap-1.5">
+                                                <td className="px-6 py-4 capitalize text-gray-300">{item.type}</td>
+                                                <td className="px-6 py-4 text-gray-400">{item.date}</td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex flex-wrap gap-1">
                                                         {item.tags.slice(0, 2).map((tag, index) => (
-                                                            <span key={index} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
-                                                                {tag}
-                                                            </span>
+                                                            <span key={index} className="bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded text-xs">{tag}</span>
                                                         ))}
                                                         {item.tags.length > 2 && (
-                                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                                            <span className="bg-gray-700 text-gray-400 px-2 py-0.5 rounded text-xs">
                                                                 +{item.tags.length - 2}
                                                             </span>
                                                         )}
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                    <div className="flex justify-end space-x-3">
-                                                        <button className="text-indigo-600 hover:text-indigo-900 cursor-pointer" title="View">
-                                                            <i className="fas fa-eye"></i>
-                                                        </button>
-                                                        <button className="text-gray-500 hover:text-indigo-600 cursor-pointer" title="Download">
-                                                            <i className="fas fa-download"></i>
-                                                        </button>
-                                                        <button className="text-gray-500 hover:text-indigo-600 cursor-pointer" title="Share">
-                                                            <i className="fas fa-share-alt"></i>
-                                                        </button>
-                                                        <button className="text-gray-500 hover:text-red-600 cursor-pointer" title="Delete" onClick={() => handleDelete(item.id)}>
-                                                            <i className="fas fa-trash-alt"></i>
-                                                        </button>
-                                                    </div>
+                                                <td className="px-6 py-4 text-right space-x-3">
+                                                    <i className="fas fa-eye text-blue-400 hover:text-blue-500 cursor-pointer"></i>
+                                                    <i className="fas fa-download text-gray-400 hover:text-blue-400 cursor-pointer"></i>
+                                                    <i className="fas fa-share-alt text-gray-400 hover:text-blue-400 cursor-pointer"></i>
+                                                    <i className="fas fa-trash-alt text-red-400 hover:text-red-500 cursor-pointer" onClick={() => handleDelete(item.id)}></i>
                                                 </td>
                                             </tr>
                                         ))}
