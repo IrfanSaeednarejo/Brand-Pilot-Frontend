@@ -45,7 +45,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className='w-full p-3 text-sm rounded-lg bg-gray-700 text-white border border-gray-600 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none'
-              placeholder='name@college.com'
+              placeholder='example@gmail.com'
               required
             />
           </div>

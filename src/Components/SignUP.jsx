@@ -58,7 +58,7 @@ function SignUP() {
                   value={formData.email}
                   onChange={handleChange}
                   className='bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400'
-                  placeholder='name@college.com'
+                  placeholder='example@gmail.com'
                   required
                 />
               </div>
