@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { login } from "../../service";
 function Login() {
   const [email, setEmail] = useState("");
@@ -75,12 +75,12 @@ function Login() {
           </button>
           <p className='text-sm text-gray-400 text-center'>
             Don’t have an account yet?{" "}
-            <a
+            <Link
               href='/signup'
               className='text-blue-500 hover:underline font-medium'
             >
               Sign up
-            </a>
+            </Link>
           </p>
         </form>
       </div>
