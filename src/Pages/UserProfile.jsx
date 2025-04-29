@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 const UserProfilePage = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("overview");
 
   const [user] = useState({
     username: "BrandCo",
