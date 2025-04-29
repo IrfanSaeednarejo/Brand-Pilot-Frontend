@@ -25,7 +25,6 @@ const AppRouter = () => {
           <Route path='/contact' element={<ContactUs />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
-          
           <Route path='/profile' element={<Profile />} />
           <Route path='/generate' element={<ContentGenerator />} />
           <Route path='/output' element={<OutputPreview />} />

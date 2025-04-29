@@ -33,7 +33,7 @@ const Footer = () => {
               <ul className='text-gray-600 dark:text-gray-400'>
                 <li className='mb-4'>
                   <Link
-                    to='https://github.com/AboubakarArisar/NoteSwap-Frontend'
+                    to='https://github.com/IrfanSaeednarejo/Brand-Pilot'
                     target='_blank'
                     className='hover:underline '
                   >
