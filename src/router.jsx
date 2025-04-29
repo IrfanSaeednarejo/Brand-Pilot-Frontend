@@ -5,7 +5,7 @@ import AboutUs from "./Pages/AboutUS";
 import ContactUs from "./Pages/ContactUS";
 import Login from "./Components/Login";
 import Signup from "./Components/SignUP";
-import Profile from "./Pages/UserProfile";
+import UserProfilePage from "./Pages/UserProfile";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 
@@ -25,7 +25,7 @@ const AppRouter = () => {
           <Route path='/contact' element={<ContactUs />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/profile' element={<UserProfilePage />} />
           <Route path='/generate' element={<ContentGenerator />} />
           <Route path='/output' element={<OutputPreview />} />
           <Route path='/history' element={<ContentHistory />} />
