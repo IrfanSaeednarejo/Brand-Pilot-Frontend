@@ -21,7 +21,7 @@ const Footer = () => {
               <ul className='text-gray-600 dark:text-gray-400'>
                 <li className='mb-4'>
                   <Link to='/' className='hover:underline'>
-                  BranPilot
+                  BrandPilot
                   </Link>
                 </li>
               </ul>
@@ -73,7 +73,7 @@ const Footer = () => {
           <span className='text-sm text-gray-500 sm:text-center dark:text-gray-400'>
             © {new Date().getFullYear()}{" "}
             <Link href='/' className='hover:undderline'>
-              BranPilot
+              BrandPilot
             </Link>
             . All Rights Reserved.
           </span>
