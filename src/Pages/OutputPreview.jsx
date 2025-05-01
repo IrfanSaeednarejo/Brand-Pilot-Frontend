@@ -238,7 +238,14 @@ console.log("Parsed Sections:", {
         <div className="space-y-6">
           
           <div className="bg-gray-700/50 p-5 rounded-xl border border-gray-600 hover:border-cyan-400/30 transition-colors">
-          <div className="flex gap-2 justify-end mb-4">
+          
+          
+          <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-purple-500/10 text-purple-400 text-xs px-2 py-1 rounded-full">Blog</span>
+                    <span className="text-sm text-gray-400">Blog Variant #1</span>
+                  </div>
+                  <div className="flex gap-2">
                     <button className="p-2 text-gray-400 hover:text-cyan-400 rounded-lg hover:bg-gray-600 transition-colors">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
@@ -250,6 +257,8 @@ console.log("Parsed Sections:", {
                       </svg>
                     </button>
                   </div>
+                </div>
+
             <div className="prose prose-invert max-w-none text-gray-300 whitespace-pre-line">
             {contentSections.blog}
             </div>
