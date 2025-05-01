@@ -64,6 +64,14 @@ const Footer = () => {
                     Output Preview
                   </Link>
                 </li>
+                <li className='mb-4'>
+                  <Link
+                    to='home'
+                    className='hover:underline '
+                  >
+                    Home
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

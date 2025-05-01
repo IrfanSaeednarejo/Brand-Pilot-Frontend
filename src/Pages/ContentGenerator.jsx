@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const ContentGenerator = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     productName: '',
     productType: '',
@@ -10,6 +13,12 @@ const ContentGenerator = () => {
     additionalNotes: '',
     platforms: []
   });
+
+  const apiUrl = import.meta.env.REACT_APP_AIMLAPI_KEY;
+
+const [generatedContent, setGeneratedContent] = useState(null);
+const [loading, setLoading] = useState(false);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,10 +40,70 @@ const ContentGenerator = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    setLoading(true);
+    setGeneratedContent(null); // Reset previous output
+  
+    const prompt = `
+  Generate a marketing content package for a product with the following details:
+  - Product Name: ${formData.productName}
+  - Product Type: ${formData.productType}
+  - Description: ${formData.productDescription}
+  - Tone: ${formData.tone}
+  - Target Audience: ${formData.targetAudience.join(", ")}
+  - Additional Notes: ${formData.additionalNotes}
+  - Platforms: ${formData.platforms.join(", ")}
+  
+  Provide:
+  1. A compelling title
+  2. A short promotional description
+  3. A detailed blog/article
+  4. Suggested AI-generated product image ideas
+  `;
+  
+    try {
+      const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer 604b23575d3c42e895a3025619521497`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { role: 'system', content: 'You are a professional content generator AI.' },
+            { role: 'user', content: prompt }
+          ],
+        }),
+      });
+  
+      const data = await response.json();
+      const aiReply = data.choices?.[0]?.message?.content;
+      setGeneratedContent(aiReply || 'No content returned.');
+
+  // Prepare data for navigation and storage
+  const outputData = {
+    generatedContent: aiReply,
+    formData
   };
+
+  // Navigate with state
+  navigate('/output', { 
+    state: outputData 
+  });
+  
+  // Store in localStorage
+  localStorage.setItem('generatedContent', JSON.stringify(outputData));
+
+    } catch (error) {
+      console.error('API Error:', error);
+      setGeneratedContent('Failed to generate content.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8">
@@ -217,6 +286,13 @@ const ContentGenerator = () => {
             </button>
           </div>
         </form>
+
+
+
+
+        {/* Buttons */}
+        {loading && <p className="text-blue-400 mt-8 text-center">Generating content...</p>}
+
       </div>
     </div>
   );

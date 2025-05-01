@@ -9,7 +9,6 @@ import UserProfilePage from "./Pages/UserProfile";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 
-
 import ContentGenerator from './Pages/ContentGenerator'
 import OutputPreview from './Pages/OutputPreview'
 import ContentHistory from './Pages/ContentHistory'

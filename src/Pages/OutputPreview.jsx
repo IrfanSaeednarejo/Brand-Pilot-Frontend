@@ -1,13 +1,113 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const OutputPreview = () => {
-  const [activeTab, setActiveTab] = useState("titles");
+  const location = useLocation();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("titles");
+  const [contentData, setContentData] = useState({
+    generatedContent: '',
+    formData: null
+  });
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    try {
+      // 1. First check navigation state
+      if (location.state?.generatedContent) {
+        setContentData({
+          generatedContent: location.state.generatedContent || '',
+          formData: location.state.formData || null
+        });
+      } 
+      // 2. Fallback to localStorage
+      else {
+        const savedContent = localStorage.getItem('generatedContent');
+        if (savedContent) {
+          const parsed = JSON.parse(savedContent);
+          setContentData({
+            generatedContent: parsed?.generatedContent || '',
+            formData: parsed?.formData || null
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error loading content:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [location.state]);
+
+  const parseGeneratedContent = (content) => {
+    if (!content || typeof content !== 'string') {
+      return {
+        title: 'No content available',
+        description: 'Please generate content first',
+        blog: '',
+        images: ''
+      };
+    }
+  
+    // More accurate parsing for your specific format
+    const getSection = (content, marker) => {
+      const start = content.indexOf(marker);
+      if (start === -1) return '';
+      
+      const end = content.indexOf('---', start + marker.length);
+      return content
+        .substring(start + marker.length, end !== -1 ? end : undefined)
+        .trim();
+    };
+  
+    return {
+      title: getSection(content, '#### 1. Compelling Title\n'),
+      description: getSection(content, '#### 2. Short Promotional Description\n'),
+      blog: getSection(content, '#### 3. Detailed Blog Article\n\n'),
+      images: '' // Add if you have image section
+    };
+  };
+
+  if (loading) {
+    return <div className="loading-spinner">Loading...</div>;
+  }
+
+
+  const contentSections = parseGeneratedContent(contentData.generatedContent);
+
+  // Debugging - add this temporarily
+console.log("Raw API Response:", contentData.generatedContent);
+console.log("Parsed Sections:", {
+  title: contentSections.title,
+  description: contentSections.description,
+  blog: contentSections.blog,
+  images: contentSections.images
+});
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+
+
+
+  if (!contentData.generatedContent) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6">
+        <div className="max-w-7xl mx-auto bg-gray-800 rounded-xl shadow-2xl overflow-hidden border border-gray-700 p-6">
+          <h2 className="text-2xl font-bold text-red-400 mb-4">No Content Found</h2>
+          <p className="text-gray-300">
+            It looks like you came here directly without generating content first.
+          </p>
+          <button 
+            onClick={() => navigate('/generate')}
+            className="mt-4 px-4 py-2 bg-blue-600 rounded-lg text-white"
+          >
+            Go to Generator
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6">
@@ -90,8 +190,7 @@ const OutputPreview = () => {
                   </div>
                 </div>
                 <h3 className="text-xl font-medium text-gray-100 group-hover:text-cyan-300 transition-colors">
-                  The Ultimate Smart Watch: Transform Your Fitness Journey with Advanced Health Monitoring
-                </h3>
+                {contentSections.title} </h3>
               </div>
 
               {/* Additional title examples would go here */}
@@ -121,13 +220,7 @@ const OutputPreview = () => {
                   </div>
                 </div>
                 <p className="text-gray-300 leading-relaxed">
-                  Experience the future of health and fitness with our revolutionary smart watch. 
-                  Featuring advanced health monitoring technology, this premium device tracks your 
-                  heart rate, sleep patterns, and daily activity with unparalleled accuracy. 
-                  The sleek, water-resistant design combines durability with style, while the 
-                  vibrant AMOLED display ensures crystal-clear visibility in any lighting condition. 
-                  With a remarkable 7-day battery life, you'll spend less time charging and more 
-                  time achieving your fitness goals.
+                {contentSections.description}
                 </p>
               </div>
 
@@ -137,58 +230,14 @@ const OutputPreview = () => {
 
           {/* Blog Tab Content */}
           {activeTab === "blog" && (
-            <div className="space-y-6">
-              <div className="bg-gray-700/50 p-5 rounded-xl border border-gray-600 hover:border-cyan-400/30 transition-colors">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="bg-green-500/10 text-green-400 text-xs px-2 py-1 rounded-full">Blog Post</span>
-                    <span className="text-sm text-gray-400">Article Variant #1</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <button className="p-2 text-gray-400 hover:text-cyan-400 rounded-lg hover:bg-gray-600 transition-colors">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                      </svg>
-                    </button>
-                    <button className="p-2 text-gray-400 hover:text-cyan-400 rounded-lg hover:bg-gray-600 transition-colors">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold mb-3 text-gray-100">
-                  The Future of Personal Health Monitoring: How Smart Watches Are Revolutionizing Wellness
-                </h3>
-                <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
-                  <span className="flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    5 min read
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                    </svg>
-                    Health Tech, Wellness, Fitness
-                  </span>
-                </div>
-                <p className="text-gray-300 mb-4">
-                  In an era where personal health has become a top priority, smart watches have emerged as powerful tools for monitoring and improving our well-being. This comprehensive guide explores how the latest smart watch technology is transforming the way we approach health and fitness...
-                </p>
-                <div className="space-y-3">
-                  <h4 className="font-medium text-gray-100">Key Topics Covered:</h4>
-                  <ul className="space-y-2 text-gray-300 pl-5 list-disc">
-                    <li>24/7 Health Monitoring: Understanding Your Body's Patterns</li>
-                    <li>Advanced Sleep Analysis: The Science Behind Better Rest</li>
-                    <li>Fitness Tracking: From Basic Steps to Professional Athletics</li>
-                    <li>Integration with Modern Healthcare Systems</li>
-                  </ul>
-                </div>
-              </div>
+        <div className="space-y-6">
+          <div className="bg-gray-700/50 p-5 rounded-xl border border-gray-600 hover:border-cyan-400/30 transition-colors">
+            <div className="prose prose-invert max-w-none text-gray-300 whitespace-pre-line">
+            {contentSections.blog}
             </div>
-          )}
+          </div>
+        </div>
+      )}
 
           {/* Social Tab Content */}
           {activeTab === "social" && (
