@@ -48,61 +48,71 @@ const OutputPreview = () => {
 
   const parseGeneratedContent = (content) => {
     if (!content || typeof content !== 'string') {
-        return {
-            title: 'No content available',
-            description: 'Please generate content first',
-            blog: '',
-            captions: '',
-            images: ''
-        };
+      return {
+        title: 'No content available',
+        description: 'Please generate content first',
+        blog: '',
+        captions: '',
+        images: ''
+      };
     }
-
-    // Helper function with improved marker handling
-    const getSection = (startMarker, endMarker) => {
-        const startIndex = content.indexOf(startMarker);
-        if (startIndex === -1) return '';
-        
-        const contentStart = startIndex + startMarker.length;
-        let endIndex;
-        
-        // Special handling for images section (last section)
-        if (!endMarker) {
-            return content.substring(contentStart).trim();
+  
+    // Helper function to extract sections with multiple fallbacks
+    const getSection = (sectionNumber, sectionName, nextSectionNumber) => {
+      // Try different header formats
+      const headerVariations = [
+        `#### ${sectionNumber}. ${sectionName}:\n`,
+        `### ${sectionNumber}. ${sectionName}:\n`,
+        `#### ${sectionNumber}. ${sectionName}\n`,
+        `### ${sectionNumber}. ${sectionName}\n`
+      ];
+  
+      let startIndex = -1;
+      let headerUsed = '';
+      
+      for (const header of headerVariations) {
+        startIndex = content.indexOf(header);
+        if (startIndex !== -1) {
+          headerUsed = header;
+          break;
         }
-        
-        endIndex = content.indexOf(endMarker, contentStart);
-        
-        // If end marker not found but we have another section starting
-        if (endIndex === -1) {
-            const nextSectionMarkers = [
-                '### 1.', '### 2.', '### 3.', '### 4.', '### 5.'
-            ].filter(m => m !== startMarker.split(' ')[0]);
-            
-            for (const marker of nextSectionMarkers) {
-                const nextIndex = content.indexOf(marker, contentStart);
-                if (nextIndex !== -1) {
-                    endIndex = nextIndex;
-                    break;
-                }
-            }
+      }
+  
+      if (startIndex === -1) return '';
+  
+      const contentStart = startIndex + headerUsed.length;
+      
+      // Look for next section
+      const nextSectionHeaders = [
+        `#### ${nextSectionNumber}.`,
+        `### ${nextSectionNumber}.`,
+        `#### ${nextSectionNumber + 1}.`,
+        `### ${nextSectionNumber + 1}.`
+      ];
+  
+      let endIndex = content.length;
+      
+      for (const nextHeader of nextSectionHeaders) {
+        const idx = content.indexOf(nextHeader, contentStart);
+        if (idx !== -1) {
+          endIndex = idx;
+          break;
         }
-        
-        return content.substring(
-            contentStart,
-            endIndex !== -1 ? endIndex : undefined
-        )
+      }
+  
+      return content.substring(contentStart, endIndex)
         .trim()
-        .replace(/^[\n]+|[\n]+$/g, '');
+        .replace(/^["\n]+|["\n]+$/g, '');
     };
-
+  
     return {
-        title: getSection('### 1. Compelling Title:\n', '### 2.'),
-        description: getSection('### 2. Short Promotional Description:\n', '### 3.'),
-        blog: getSection('### 3. Blog/Article:\n\n', '### 4.'),
-        captions: getSection('### 4. Social media captions (for Instagram, Facebook, Twitter and Linkedin):\n\n', '### 5.'),
-        images: getSection('### 5. Suggested AI-generated product image ideas:\n', '')
+      title: getSection(1, 'Compelling Title', 2),
+      description: getSection(2, 'Short Promotional Description', 3),
+      blog: getSection(3, 'Detailed Blog/Article', 4),
+      captions: getSection(4, 'Social media captions', 5),
+      images: ''
     };
-};
+  };
 
 
   if (loading) {
@@ -115,13 +125,13 @@ const OutputPreview = () => {
   // Debugging - add this temporarily
 console.log("Raw API Response:", contentData.generatedContent);
 console.log("Parsed Sections:", {
-  title: contentSections.title,
-  description: contentSections.description,
-  blog: contentSections.blog,
-  captions: contentSections.captions,
-  images: contentSections.images
+  title: contentSections.title?.substring(0, 50) + '...',
+  description: contentSections.description?.substring(0, 50) + '...',
+  blog: contentSections.blog?.substring(0, 50) + '...',
+  captions: contentSections.captions?.substring(0, 50) + '...',
+  images: contentSections.images?.substring(0, 50) + '...'
 });
-  const handleTabClick = (tab) => {
+const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 

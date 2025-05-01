@@ -66,7 +66,7 @@ const [loading, setLoading] = useState(false);
       const response = await fetch('https://api.aimlapi.com/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer 604b23575d3c42e895a3025619521497`,
+          'Authorization': `Bearer 9941f297f3d34a72b37b362efd1ab975`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
