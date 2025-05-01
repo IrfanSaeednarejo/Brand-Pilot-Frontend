@@ -8,7 +8,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for user in localStorage
+    
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -37,7 +37,7 @@ const Header = () => {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
+         
           <div className="hidden lg:flex items-center space-x-8">
             <div className="hidden lg:flex items-center space-x-6">
               <Link
@@ -117,7 +117,7 @@ const Header = () => {
             )}
           </div>
 
-          {/* Mobile menu button */}
+          
           <div className="flex lg:hidden items-center">
             {loggedInUser && (
               <button
@@ -168,7 +168,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile menu */}
+        
         {mobileMenuOpen && (
           <div className="lg:hidden mt-3 pb-3 border-t border-gray-800">
             <div className="px-2 pt-2 pb-3 space-y-1">

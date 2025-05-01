@@ -43,7 +43,7 @@ const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setGeneratedContent(null); // Reset previous output
+    setGeneratedContent(null);
   
     const prompt = `
   Generate a marketing content package for a product with the following details:
@@ -82,7 +82,7 @@ const [loading, setLoading] = useState(false);
       const aiReply = data.choices?.[0]?.message?.content;
       setGeneratedContent(aiReply || 'No content returned.');
 
-  // After API response:
+  
 navigate('/output', { 
   state: { 
     generatedContent: aiReply,
@@ -115,7 +115,7 @@ localStorage.setItem('generatedContent', JSON.stringify({
         </div>
         <form onSubmit={handleSubmit} className="space-y-10 text-white">
           
-          {/* Product Info */}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <label htmlFor="productName" className="block text-sm font-medium mb-2 text-blue-400">Product Name</label>
@@ -148,10 +148,10 @@ localStorage.setItem('generatedContent', JSON.stringify({
             </div>
           </div>
 
-          {/* Divider */}
+         
           <hr className="border-blue-500/20" />
 
-          {/* Description */}
+         
           <div>
             <label htmlFor="productDescription" className="block text-sm font-medium mb-2 text-blue-400">Product Description</label>
             <textarea
@@ -166,7 +166,7 @@ localStorage.setItem('generatedContent', JSON.stringify({
             />
           </div>
 
-          {/* Tone */}
+        
           <div>
             <label className="block text-sm font-medium mb-4 text-blue-400">Tone</label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -186,7 +186,7 @@ localStorage.setItem('generatedContent', JSON.stringify({
             </div>
           </div>
 
-          {/* Target Audience */}
+       
           <div>
             <label className="block text-sm font-medium mb-4 text-blue-400">Target Audience</label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -222,7 +222,7 @@ localStorage.setItem('generatedContent', JSON.stringify({
             </div>
           </div>
 
-          {/* Additional Notes */}
+         
           <div>
             <label htmlFor="additionalNotes" className="block text-sm font-medium mb-2 text-blue-400">Additional Notes</label>
             <textarea
@@ -236,7 +236,7 @@ localStorage.setItem('generatedContent', JSON.stringify({
             />
           </div>
 
-          {/* Preferred Platforms */}
+          
           <div>
             <label className="block text-sm font-medium mb-4 text-blue-400">Preferred Platforms</label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -258,7 +258,7 @@ localStorage.setItem('generatedContent', JSON.stringify({
             </div>
           </div>
 
-          {/* Buttons */}
+          
           <div className="flex justify-end gap-6 pt-6">
             <button
               type="button"
@@ -289,7 +289,7 @@ localStorage.setItem('generatedContent', JSON.stringify({
 
 
 
-        {/* Buttons */}
+       
         {loading && <p className="text-blue-400 mt-8 text-center">Generating content...</p>}
 
       </div>

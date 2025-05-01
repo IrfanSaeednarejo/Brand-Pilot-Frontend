@@ -21,14 +21,14 @@ const OutputPreview = () => {
 
   useEffect(() => {
     try {
-      // 1. First check navigation state
+     
       if (location.state?.generatedContent) {
         setContentData({
           generatedContent: location.state.generatedContent || '',
           formData: location.state.formData || null
         });
       } 
-      // 2. Fallback to localStorage
+      
       else {
         const savedContent = localStorage.getItem('generatedContent');
         if (savedContent) {
@@ -57,9 +57,9 @@ const OutputPreview = () => {
       };
     }
   
-    // Helper function to extract sections with multiple fallbacks
+    
     const getSection = (sectionNumber, sectionName, nextSectionNumber) => {
-      // Try different header formats
+      
       const headerVariations = [
         `#### ${sectionNumber}. ${sectionName}:\n`,
         `### ${sectionNumber}. ${sectionName}:\n`,
@@ -82,7 +82,7 @@ const OutputPreview = () => {
   
       const contentStart = startIndex + headerUsed.length;
       
-      // Look for next section
+      
       const nextSectionHeaders = [
         `#### ${nextSectionNumber}.`,
         `### ${nextSectionNumber}.`,
@@ -122,7 +122,7 @@ const OutputPreview = () => {
 
   const contentSections = parseGeneratedContent(contentData.generatedContent);
 
-  // Debugging - add this temporarily
+ 
 console.log("Raw API Response:", contentData.generatedContent);
 console.log("Parsed Sections:", {
   title: contentSections.title?.substring(0, 50) + '...',
@@ -160,9 +160,9 @@ const handleTabClick = (tab) => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6">
-      {/* Main Content Container */}
+      
       <div className="max-w-7xl mx-auto bg-gray-800 rounded-xl shadow-2xl overflow-hidden border border-gray-700">
-        {/* Header Section */}
+       
         <div className="p-6 border-b border-gray-700">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
@@ -191,7 +191,7 @@ const handleTabClick = (tab) => {
           </div>
         </div>
 
-        {/* Tabs Navigation */}
+        
         <div className="border-b border-gray-700 px-6">
           <nav className="flex overflow-x-auto scrollbar-hide -mb-px space-x-8">
             {["titles", "descriptions", "blog", "social", "images"].map((tab) => (
@@ -214,9 +214,9 @@ const handleTabClick = (tab) => {
           </nav>
         </div>
 
-        {/* Content Area */}
+        
         <div className="p-6">
-          {/* Titles Tab Content */}
+          
           {activeTab === "titles" && (
             <div className="space-y-4">
               <div className="bg-gray-700/50 p-5 rounded-xl border border-gray-600 hover:border-cyan-400/30 transition-colors group">
@@ -245,11 +245,11 @@ const handleTabClick = (tab) => {
               </blockquote>
               </div>
 
-              {/* Additional title examples would go here */}
+              
             </div>
           )}
 
-          {/* Descriptions Tab Content */}
+          
           {activeTab === "descriptions" && (
             <div className="space-y-6">
               <div className="bg-gray-700/50 p-5 rounded-xl border border-gray-600 hover:border-cyan-400/30 transition-colors">
@@ -277,11 +277,11 @@ const handleTabClick = (tab) => {
                 </blockquote>
               </div>
 
-              {/* Additional description examples would go here */}
+              
             </div>
           )}
 
-          {/* Blog Tab Content */}
+         
           {activeTab === "blog" && (
             
         <div className="space-y-6">
@@ -319,7 +319,7 @@ const handleTabClick = (tab) => {
         </div>
       )}
 
-          {/* Social Tab Content */}
+         
           {activeTab === "social" && (
             <div className="space-y-6">
               <div className="bg-gray-700/50 p-5 rounded-xl border border-gray-600 hover:border-cyan-400/30 transition-colors">
@@ -397,7 +397,7 @@ const handleTabClick = (tab) => {
                 </div>
               </div>
 
-              {/* Additional image placeholders would go here */}
+              
             </div>
           )}
         </div>

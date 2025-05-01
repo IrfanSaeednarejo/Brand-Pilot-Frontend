@@ -21,10 +21,10 @@ const UserProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      {/* Profile Section */}
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row gap-8 mb-8">
-          {/* Profile Card */}
+          
           <div className="w-full md:w-1/3 bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-lg">
             <div className="flex flex-col items-center">
               <div className="relative mb-6">
@@ -62,9 +62,9 @@ const UserProfilePage = () => {
             </div>
           </div>
 
-          {/* Main Content */}
+          
           <div className="w-full md:w-2/3">
-            {/* Stats Card and New Campaign Button */}
+            
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
               <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-cyan-400/30 transition-all group flex-1">
                 <div className="flex items-center justify-between">
@@ -113,7 +113,7 @@ const UserProfilePage = () => {
               </button>
             </div>
 
-            {/* Tabs - Simplified to just Overview */}
+            
             <div className="border-b border-gray-700 mb-6">
               <nav className="-mb-px flex space-x-8">
                 <button
@@ -124,7 +124,7 @@ const UserProfilePage = () => {
               </nav>
             </div>
 
-            {/* Overview Content */}
+            
             <div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                 {user.campaigns.slice(0, 3).map((campaign) => (
