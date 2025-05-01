@@ -59,7 +59,7 @@ const [loading, setLoading] = useState(false);
   1. A compelling title
   2. A short promotional description
   3. A detailed blog/article
-  4. Suggested AI-generated product image ideas
+  4. Social media captions (for Instagram, Facebook, Twitter and Linkedin)
   `;
   
     try {
