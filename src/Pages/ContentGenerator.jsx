@@ -82,19 +82,18 @@ const [loading, setLoading] = useState(false);
       const aiReply = data.choices?.[0]?.message?.content;
       setGeneratedContent(aiReply || 'No content returned.');
 
-  // Prepare data for navigation and storage
-  const outputData = {
+  // After API response:
+navigate('/output', { 
+  state: { 
     generatedContent: aiReply,
-    formData
-  };
+    formData: formData 
+  } 
+});
 
-  // Navigate with state
-  navigate('/output', { 
-    state: outputData 
-  });
-  
-  // Store in localStorage
-  localStorage.setItem('generatedContent', JSON.stringify(outputData));
+localStorage.setItem('generatedContent', JSON.stringify({
+  generatedContent: aiReply,
+  formData: formData
+}));
 
     } catch (error) {
       console.error('API Error:', error);

@@ -48,22 +48,24 @@ const OutputPreview = () => {
       };
     }
   
-    // More accurate parsing for your specific format
-    const getSection = (content, marker) => {
-      const start = content.indexOf(marker);
-      if (start === -1) return '';
+    // Helper function to extract sections
+    const getSection = (startMarker, endMarker) => {
+      const startIndex = content.indexOf(startMarker);
+      if (startIndex === -1) return '';
       
-      const end = content.indexOf('---', start + marker.length);
-      return content
-        .substring(start + marker.length, end !== -1 ? end : undefined)
-        .trim();
+      const contentStart = startIndex + startMarker.length;
+      const endIndex = endMarker ? content.indexOf(endMarker, contentStart) : content.length;
+      
+      return content.substring(contentStart, endIndex !== -1 ? endIndex : content.length)
+        .trim()
+        .replace(/^[\n]+|[\n]+$/g, ''); // Trim surrounding newlines
     };
   
     return {
-      title: getSection(content, '#### 1. Compelling Title\n'),
-      description: getSection(content, '#### 2. Short Promotional Description\n'),
-      blog: getSection(content, '#### 3. Detailed Blog Article\n\n'),
-      images: '' // Add if you have image section
+      title: getSection('### 1. Compelling Title:\n', '### 2.'),
+      description: getSection('### 2. Short Promotional Description:\n', '### 3.'),
+      blog: getSection('### 3. Detailed Blog/Article:\n\n', '### 4.'),
+      images: ""
     };
   };
 
