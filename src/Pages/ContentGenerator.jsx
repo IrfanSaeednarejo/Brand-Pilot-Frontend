@@ -54,11 +54,11 @@ const [loading, setLoading] = useState(false);
   - Target Audience: ${formData.targetAudience.join(", ")}
   - Additional Notes: ${formData.additionalNotes}
   - Platforms: ${formData.platforms.join(", ")}
-  
+
   Provide:
   1. A compelling title
   2. A short promotional description
-  3. A detailed blog/article
+  3. A Detailed blog/article
   4. Social media captions (for Instagram, Facebook, Twitter and Linkedin)
   `;
   

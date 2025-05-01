@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import RawResponseViewer from './RawResponseViewer';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { 
+  BookOpenIcon,
+  SparklesIcon 
+} from '@heroicons/react/24/outline';
+
 
 const OutputPreview = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("titles");
+  const [showRawResponse, setShowRawResponse] = useState(false);
   const [contentData, setContentData] = useState({
     generatedContent: '',
     formData: null
@@ -40,36 +48,62 @@ const OutputPreview = () => {
 
   const parseGeneratedContent = (content) => {
     if (!content || typeof content !== 'string') {
-      return {
-        title: 'No content available',
-        description: 'Please generate content first',
-        blog: '',
-        captions:"",
-        images: ''
-      };
+        return {
+            title: 'No content available',
+            description: 'Please generate content first',
+            blog: '',
+            captions: '',
+            images: ''
+        };
     }
-  
-    // Helper function to extract sections
+
+    // Helper function with improved marker handling
     const getSection = (startMarker, endMarker) => {
-      const startIndex = content.indexOf(startMarker);
-      if (startIndex === -1) return '';
-      
-      const contentStart = startIndex + startMarker.length;
-      const endIndex = endMarker ? content.indexOf(endMarker, contentStart) : content.length;
-      
-      return content.substring(contentStart, endIndex !== -1 ? endIndex : content.length)
+        const startIndex = content.indexOf(startMarker);
+        if (startIndex === -1) return '';
+        
+        const contentStart = startIndex + startMarker.length;
+        let endIndex;
+        
+        // Special handling for images section (last section)
+        if (!endMarker) {
+            return content.substring(contentStart).trim();
+        }
+        
+        endIndex = content.indexOf(endMarker, contentStart);
+        
+        // If end marker not found but we have another section starting
+        if (endIndex === -1) {
+            const nextSectionMarkers = [
+                '### 1.', '### 2.', '### 3.', '### 4.', '### 5.'
+            ].filter(m => m !== startMarker.split(' ')[0]);
+            
+            for (const marker of nextSectionMarkers) {
+                const nextIndex = content.indexOf(marker, contentStart);
+                if (nextIndex !== -1) {
+                    endIndex = nextIndex;
+                    break;
+                }
+            }
+        }
+        
+        return content.substring(
+            contentStart,
+            endIndex !== -1 ? endIndex : undefined
+        )
         .trim()
-        .replace(/^[\n]+|[\n]+$/g, ''); // Trim surrounding newlines
+        .replace(/^[\n]+|[\n]+$/g, '');
     };
-  
+
     return {
-      title: getSection('### 1. Compelling Title:\n', '### 2.'),
-      description: getSection('### 2. Short Promotional Description:\n', '### 3.'),
-      blog: getSection('### 3. Detailed Blog/Article:\n', '### 4.'),
-      captions:getSection('### 3. Detailed Blog/Article:\n\n', '### 5.'),
-      images: ""
+        title: getSection('### 1. Compelling Title:\n', '### 2.'),
+        description: getSection('### 2. Short Promotional Description:\n', '### 3.'),
+        blog: getSection('### 3. Blog/Article:\n\n', '### 4.'),
+        captions: getSection('### 4. Social media captions (for Instagram, Facebook, Twitter and Linkedin):\n\n', '### 5.'),
+        images: getSection('### 5. Suggested AI-generated product image ideas:\n', '')
     };
-  };
+};
+
 
   if (loading) {
     return <div className="loading-spinner">Loading...</div>;
@@ -84,6 +118,7 @@ console.log("Parsed Sections:", {
   title: contentSections.title,
   description: contentSections.description,
   blog: contentSections.blog,
+  captions: contentSections.captions,
   images: contentSections.images
 });
   const handleTabClick = (tab) => {
@@ -177,6 +212,7 @@ console.log("Parsed Sections:", {
               <div className="bg-gray-700/50 p-5 rounded-xl border border-gray-600 hover:border-cyan-400/30 transition-colors group">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
+                  <SparklesIcon className="w-5 h-5 text-yellow-400" />
                     <span className="bg-blue-500/10 text-blue-400 text-xs px-2 py-1 rounded-full">SEO Optimized</span>
                     <span className="text-sm text-gray-400">Title Variant #1</span>
                   </div>
@@ -193,8 +229,10 @@ console.log("Parsed Sections:", {
                     </button>
                   </div>
                 </div>
-                <h3 className="text-xl font-medium text-gray-100 group-hover:text-cyan-300 transition-colors">
-                {contentSections.title} </h3>
+
+                <blockquote className="text-2xl font-medium text-gray-100 pl-4 border-l-4 border-blue-500">
+              {contentSections.title}
+              </blockquote>
               </div>
 
               {/* Additional title examples would go here */}
@@ -223,9 +261,10 @@ console.log("Parsed Sections:", {
                     </button>
                   </div>
                 </div>
-                <p className="text-gray-300 leading-relaxed">
+                
+                <blockquote className="text-2xl font-medium text-gray-100 pl-4 border-l-4 border-blue-500">
                 {contentSections.description}
-                </p>
+                </blockquote>
               </div>
 
               {/* Additional description examples would go here */}
@@ -242,6 +281,7 @@ console.log("Parsed Sections:", {
           
           <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
+                  <BookOpenIcon className="w-5 h-5 text-purple-400" />
                     <span className="bg-purple-500/10 text-purple-400 text-xs px-2 py-1 rounded-full">Blog</span>
                     <span className="text-sm text-gray-400">Blog Variant #1</span>
                   </div>
@@ -260,7 +300,9 @@ console.log("Parsed Sections:", {
                 </div>
 
             <div className="prose prose-invert max-w-none text-gray-300 whitespace-pre-line">
-            {contentSections.blog}
+            <blockquote className="text-2xl font-medium text-gray-100 pl-4 border-l-4 border-blue-500">
+                {contentSections.blog}
+                </blockquote>
             </div>
           </div>
           
@@ -274,9 +316,9 @@ console.log("Parsed Sections:", {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <div className="bg-gradient-to-br from-pink-600 to-purple-600 p-1 rounded">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-white">
+                      {/* <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-white">
                         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                      </svg>
+                      </svg> */}
                     </div>
                   
                   </div>
@@ -296,9 +338,9 @@ console.log("Parsed Sections:", {
                 <div className="space-y-4">
                   <div>
                     <h4 className="text-sm font-medium text-gray-300 mb-2">Caption</h4>
-                    <p className="text-gray-100 bg-gray-700/30 p-3 rounded-lg">
-                      {contentSections.captions}
-                    </p>
+                    <blockquote className="text-2xl font-medium text-gray-100 pl-4 border-l-4 border-blue-500">
+                {contentSections.captions}
+                </blockquote>
                   </div>
                   {/* <div>
                     <h4 className="text-sm font-medium text-gray-300 mb-2">Hashtags</h4>
@@ -350,6 +392,10 @@ console.log("Parsed Sections:", {
           )}
         </div>
       </div>
+
+      {showRawResponse && (
+     <RawResponseViewer content={contentData.generatedContent} />
+)}
     </div>
   );
 };
