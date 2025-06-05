@@ -35,7 +35,7 @@ Product images (via image generation API)
 1. **Clone this repository:**
 
    ```bash
-   git clone https://github.com/IrfanSaeednarejo/regexToDFA.git
+   git clone https://github.com/IrfanSaeednarejo/Brand-Pilot.git
    cd Brand-Pilot
 
 2. **Install dependencies:**
