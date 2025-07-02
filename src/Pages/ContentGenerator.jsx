@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import dotenv from "dotenv"
-dotenv.config({
-    path: './.env'
-})
+
 
 
 const ContentGenerator = () => {
@@ -18,7 +15,7 @@ const ContentGenerator = () => {
     platforms: []
   });
 
-const apiUrl = process.env.API_KEY;
+const apiUrl = "167f543dd9434b398b93afb6087d7ad7"
 
 const [generatedContent, setGeneratedContent] = useState(null);
 const [loading, setLoading] = useState(false);
