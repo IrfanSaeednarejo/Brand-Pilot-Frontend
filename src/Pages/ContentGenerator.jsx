@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import dotenv from "dotenv"
+dotenv.config({
+    path: './.env'
+})
 
 
 const ContentGenerator = () => {
@@ -14,7 +18,7 @@ const ContentGenerator = () => {
     platforms: []
   });
 
-  const apiUrl = import.meta.env.VITE_AIMLAPI_KEY;
+const apiUrl = process.env.API_KEY;
 
 const [generatedContent, setGeneratedContent] = useState(null);
 const [loading, setLoading] = useState(false);
