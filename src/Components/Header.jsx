@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useLogout } from '../hooks/useLogout.js'
+import { useAuthContext } from '../hooks/useAuthContext.js'
+
 
 const Header = () => {
   const [loggedInUser, setLoggedInUser] = useState(false);

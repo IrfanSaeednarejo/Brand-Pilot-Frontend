@@ -1,30 +1,23 @@
 import React, { useState } from "react";
-// import toast, { Toaster } from "react-hot-toast";
+import { useLogin } from "../hooks/useLogin.js"
+
+
 import { Link, useNavigate } from "react-router-dom";
-// import { login } from "../../service";
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {login, error, isLoading} = useLogin()
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-    // login(email, password).then((data) => {
-    //   // console.log(data);
-    //   if (data.success) {
-    //     toast.success("Login successful");
-    //     localStorage.setItem("token", data.token);
-    //     localStorage.setItem("user", JSON.stringify(data.student));
-    //     navigate("/");
-    //   } else {
-    //     toast.error(data.message);
-    //   }
-    // });
-  };
+    await login(email, password)
+  }
 
   return (
     <section className='min-h-screen bg-gray-900 flex items-center justify-center px-4'>
-      {/* <Toaster /> */}
       <div className='w-full max-w-md bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-8'>
         <div className='flex flex-col items-center mb-6'>
           <h1 className='text-2xl font-bold text-white mb-4'>
@@ -67,12 +60,15 @@ function Login() {
             />
           </div>
 
-          <button
-            type='submit'
-            className='w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-3 transition focus:outline-none focus:ring-2 focus:ring-blue-500'
-          >
-            Sign in
-          </button>
+
+          <button type='submit'
+            className='w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-3 transition focus:outline-none focus:ring-2 focus:ring-blue-500' 
+            disabled={isLoading}>
+              Log in
+            </button>
+
+      {error && <div className="error">{error}</div>}
+
           <p className='text-sm text-gray-400 text-center'>
             Don’t have an account yet?{" "}
             <Link
