@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useAuthContext } from './hooks/useAuthContext.js'
 
 import LandingPage from "./Components/LandingPage";
 import AboutUs from "./Pages/AboutUS";
@@ -14,16 +15,18 @@ import OutputPreview from './Pages/OutputPreview'
 
 
 const AppRouter = () => {
+    const { user } = useAuthContext()
+
   return (
     <>
       <Router>
         <Header />
         <Routes>
-          <Route path='/' element={<LandingPage />} />
+          <Route path='/' element={user ? <LandingPage/> : <Navigate to="/login" />} />
           <Route path='/about' element={<AboutUs />} />
           <Route path='/contact' element={<ContactUs />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
+          <Route path='/login' element={!user ? <Login /> : <Navigate to="/" />}  />
+          <Route path='/signup' element={!user ? <Signup /> : <Navigate to="/" />} />
          
           <Route path='/generate' element={<ContentGenerator />} />
           <Route path='/output' element={<OutputPreview />} />
