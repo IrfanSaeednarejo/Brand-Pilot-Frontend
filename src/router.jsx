@@ -24,10 +24,10 @@ const AppRouter = () => {
           <Route path='/contact' element={<ContactUs />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
-          <Route path='/profile' element={<UserProfilePage />} />
+          {/* <Route path='/profile' element={<UserProfilePage />} /> */}
           <Route path='/generate' element={<ContentGenerator />} />
           <Route path='/output' element={<OutputPreview />} />
-          <Route path='/history' element={<ContentHistory />} />
+          {/* <Route path='/history' element={<ContentHistory />} /> */}
 
         </Routes>
         <Footer />
