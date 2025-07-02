@@ -11,7 +11,8 @@ export const useLogout = () => {
 
    
     dispatch({ type: 'LOGOUT' })
-    Navigate("/login")
+    // Redirect to the login page
+    return <Navigate to="/login" replace />
   }
 
   return { logout }
